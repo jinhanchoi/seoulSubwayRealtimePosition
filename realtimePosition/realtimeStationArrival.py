@@ -17,6 +17,7 @@ import pandas as pd
 import os
 import datetime
 import logging
+from multiprocessing.pool import ThreadPool
 
 class ApiCaller():
   def __init__(self, logger):
@@ -78,7 +79,7 @@ def setLoggerInfo():
     file_handler = logging.FileHandler(str(datetime.datetime.now())+'.log')
     mylogger.addHandler(file_handler)
 
-from multiprocessing.pool import ThreadPool
+
 def main():
     setLoggerInfo()
     logger = logging.getLogger("my")
@@ -95,18 +96,6 @@ def main():
     frameList = list(map(lambda result: result.get(), asyncList))
     resultDf = pd.concat(frameList)
     resultDf.to_csv(str(datetime.datetime.now())+"realtimeStationArrival.csv")
-    # for result in asyncList:
-    #     result.get()
-    # async_result2 = pool.apply_async(apiCall, (getApiUrlByParam(), "선릉"))
-    # return_val = async_result.get()
-    # return_val2 = async_result2.get()
-
-    # print(return_val)
-    # print(return_val2)
-
-    #apiCall(getApiUrlByParam(),"yuksam")
-    #apiCall(getApiUrlByParam(lineName="2호선"),"line2")
-
 
 # python filename.py
 if __name__ == "__main__":
