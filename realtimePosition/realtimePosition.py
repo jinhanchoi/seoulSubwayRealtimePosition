@@ -16,6 +16,14 @@ import json
 import pandas as pd
 import os
 import datetime
+import logging
+
+class ApiCaller():
+  def __init__(self, logger):
+    self.logger = logging.getLogger("my")
+  def run():
+    self.logger.info("run")
+
 def apiKey():
     return "4943656c6779736f31303174776c5845"
 
@@ -28,8 +36,9 @@ def resultStrFormatChange(jsonStr):
     return jsonStr.replace("\'","\"").replace("None","\"None\"")
 
 def apiCall(uri,filePrefix):
-    
+    logger = logging.getLogger("my")
     try:
+      logger.info("api call!")
       req = urllib.request.Request(uri)
       res = urllib.request.urlopen(req)
       jsonObj = json.load(res)
@@ -37,7 +46,7 @@ def apiCall(uri,filePrefix):
       print(pdataframe)
       pdataframe.to_csv(filePrefix+"-"+str(datetime.datetime.now())+'.csv')
     except urllib.error.HTTPError:
-      apiCall(uri)
+      apiCall(uri,filePrefix)
     finally:
       pass
     
@@ -55,10 +64,23 @@ def uploadToHDFS(file):
     req  = urllib.request.Request("http://172.20.10.5:50075/webhdfs/v1/user/myjson.json?op=CREATE&&user.name=jinhanchoi&namenoderpcaddress=localhost:9000&overwrite=false",headers=headers,data=file,method="PUT")
 
     urllib.request.urlopen(req).read()
+def setLoggerInfo():
+    mylogger = logging.getLogger("my")
+    mylogger.setLevel(logging.INFO)
+
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    stream_hander = logging.StreamHandler()
+    stream_hander.setFormatter(formatter)
+    mylogger.addHandler(stream_hander)
+    file_handler = logging.FileHandler(str(datetime.datetime.now())+'.log')
+    mylogger.addHandler(file_handler)
 
 def main():
-    print(getApiUrlByParam())
-    print(apiCall(getApiUrlByParam(),"line9"))
+    setLoggerInfo()
+    logger = logging.getLogger("my")
+    logger.info("############# Main Start ##############")
+    apiCall(getApiUrlByParam(),"line9")
     apiCall(getApiUrlByParam(lineName="2호선"),"line2")
 
 
