@@ -44,7 +44,7 @@ def apiCall(uri,filePrefix):
       jsonObj = json.load(res)
       pdataframe = pd.read_json(resultStrFormatChange(str(jsonObj["realtimePositionList"])))
       print(pdataframe)
-      pdataframe.to_csv(filePrefix+"-"+str(datetime.datetime.now())+'.csv')
+      pdataframe.to_csv("results_pos/"+filePrefix+"-"+str(datetime.datetime.now())+'.csv')
     except urllib.error.HTTPError:
       apiCall(uri,filePrefix)
     finally:

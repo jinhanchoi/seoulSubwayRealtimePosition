@@ -47,12 +47,12 @@ def resultStrFormatChange(jsonStr):
 def apiCall(uri,filePrefix):
     logger = logging.getLogger("my")
     try:
-      logger.info("api call!")
+      logger.info("api call with : "+ uri)
       req = urllib.request.Request(uri)
       res = urllib.request.urlopen(req)
       jsonObj = json.load(res)
       pdataframe = pd.read_json(resultStrFormatChange(str(jsonObj["realtimeArrivalList"])))
-      print(pdataframe)
+      #logger.info("result Dataframe Count is : " + str(pdataframe.totalCount))
       #pdataframe.to_csv(filePrefix+"-"+str(datetime.datetime.now())+'.csv')
       return pdataframe
     except urllib.error.HTTPError:
@@ -95,7 +95,7 @@ def main():
 
     frameList = list(map(lambda result: result.get(), asyncList))
     resultDf = pd.concat(frameList)
-    resultDf.to_csv(str(datetime.datetime.now())+"realtimeStationArrival.csv")
+    resultDf.to_csv("results_arrival/"+str(datetime.datetime.now())+"realtimeStationArrival.csv")
 
 # python filename.py
 if __name__ == "__main__":

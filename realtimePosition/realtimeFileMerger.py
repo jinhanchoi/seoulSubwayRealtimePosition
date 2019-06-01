@@ -16,8 +16,8 @@ def readCsvFile(fileName,readHeader=False):
       return f.readlines()[1:]
 
 def main():
-  list = getFileListFromDirPath("./realtimePosition/")
-  with open("mergeFile.csv",'w') as output:
+  list = getFileListFromDirPath("./results_pos/line9")
+  with open("realtimePosition_line9.csv",'w') as output:
     for (idx,f) in enumerate(list):
       if idx == 0:
         content = readCsvFile(f,True)
